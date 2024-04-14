@@ -7,7 +7,7 @@ class Solution:
         q = deque(sorted(tokens))
         if power<q[0]:
             return 0
-        faceup = True if power >= q[0] else False
+        faceup = True
         score = 0
         while q:
             if faceup:
