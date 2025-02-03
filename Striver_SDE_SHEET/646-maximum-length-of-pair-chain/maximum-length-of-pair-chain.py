@@ -1,6 +1,6 @@
 class Solution:
     def findLongestChain(self, pairs: List[List[int]]) -> int:
-        pairs.sort(key = lambda x: (x[1],x[0]))
+        pairs.sort()
         prev = pairs[0][1]
         count = 0
         ans = 0
@@ -9,4 +9,6 @@ class Solution:
                 count+=1
                 prev = j
                 ans = max(ans,count)
+            else:
+                prev = min(prev,j)
         return ans+1
