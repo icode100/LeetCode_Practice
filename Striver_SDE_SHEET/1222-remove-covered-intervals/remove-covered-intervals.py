@@ -7,7 +7,7 @@ class Solution:
         while i<len(intervals):
             while i<len(intervals) and intervals[i][0]==ans[-1][0]: i+=1
             if i<len(intervals) and intervals[i][1]<=ans[-1][1]: i+=1
-            if i<len(intervals) and intervals[i][1]>ans[-1][1]:
+            else: 
                 ans.append(intervals[i])
                 i+=1
         # print(intervals)
