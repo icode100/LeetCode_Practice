@@ -1,22 +1,14 @@
 class Solution:
     def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
-        n = len(intervals)
-        ans = list()
-        i = 0
-        # adding intervals prior to newInterval
-        while i<n and intervals[i][1]<newInterval[0]:
-            ans.append(intervals[i])
-            i+=1
-        #performing merge interval on merging intervals with overlapping intervals with newInterval
-        while i<n and newInterval[1]>=intervals[i][0]:
-            newInterval[0] = min(newInterval[0],intervals[i][0])
-            newInterval[1] = max(newInterval[1],intervals[i][1])
-            i+=1
-        ans.append(newInterval)
-        # push remaining intervals
-        while i<n:
-            ans.append(intervals[i])
-            i+=1
-        return ans 
-
-
+        hashmap = defaultdict(int)
+        for i,j in intervals:
+            hashmap[i]+=1
+            hashmap[j]-=1
+        hashmap[newInterval[0]]+=1
+        hashmap[newInterval[1]]-=1
+        start,count,ans = 0,0, list()
+        for i in sorted(hashmap):
+            if count==0: start = i
+            count+=hashmap[i]
+            if count==0: ans.append((start,i))
+        return ans
