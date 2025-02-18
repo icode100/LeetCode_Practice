@@ -1,33 +1,36 @@
 class Solution:
     def smallestNumber(self, pattern: str) -> str:
         n = len(pattern)
-        ans = [0]*(n+1)
-        hashset = set()
-        def recursion(i,last):
-            if i==n+1: return True
-            if pattern[i-1]=='I':
-                for k in range(last+1,10):
-                    if k in hashset: continue
-                    ans[i] = k
-                    hashset.add(k)
-                    if recursion(i+1,k): return True
-                    ans[i] = 0
-                    hashset.remove(k)
-            else:
-                for k in range(1,last):
-                    if k in hashset: continue
-                    ans[i] = k
-                    hashset.add(k)
-                    if recursion(i+1,k): return True
-                    ans[i] = 0
-                    hashset.remove(k)
-            return False
+        stack = list()
         i = 0
         while i<n and pattern[i]!='I': i+=1
-        hashset.add(i+1)
-        ans[0] = i+1
-        recursion(1,i+1)
-        string = ""
-        for i in ans: string+=str(i)
-        return string
+        stack.append(i+1)
+        maxval = stack[-1]
+        i = 0
+        while i<n:
+            if pattern[i]=='I':
+                if i+1<n and pattern[i+1]=='D':
+                    j = maxval
+                    idx = i+1
+                    while idx<n and pattern[idx]!='I': 
+                        j+=1
+                        idx+=1
+                    stack.append(j+1)
+                else: stack.append(maxval+1)
+            else:
+                # if i+1<n and pattern[i+1]=='I':
+                #     j = stack[-1]
+                #     idx = i+1
+                #     while idx<n and pattern[idx]!='D':
+                #         j-=1
+                #         idx+=1
+                #     stack.append(j-1)
+                stack.append(stack[-1]-1)
+            maxval = max(maxval,stack[-1])
+            i+=1
+        # print(stack)
+        return ''.join(list(map(str,stack)))
+                    
+                
 
+        
