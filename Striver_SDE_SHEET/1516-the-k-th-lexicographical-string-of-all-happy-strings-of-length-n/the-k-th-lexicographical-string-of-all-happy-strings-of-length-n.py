@@ -1,24 +1,18 @@
 class Solution:
     def getHappyString(self, n: int, k: int) -> str:
-        no_strings_attached = ['a','b','c']
+        if k>3*(1<<(n-1)): return ""
         stack = []
-        ans = ""
-        k = k
-        def recursion(index):
-            nonlocal ans,k
-            if index==n:
-                k-=1
-                if k==0:
-                    print(stack)
-                    ans = ''.join(stack)
-                return
-            for i in no_strings_attached:
-                if not stack or i!=stack[-1]: 
-                    stack.append(i)
-                    recursion(index+1)
-                    stack.pop()
-            return 
-        recursion(0)
-        return ans
+        while len(stack)<n and k>0:
+            for c in ["a","b","c"]:
+                if not stack or stack[-1]!=c:
+                    stack.append(c)
+                    val = (1<<(n-len(stack)))
+                    if val>=k: break
+                    else: 
+                        stack.pop()
+                        k-=val
+        return ''.join(stack)
+
+
 
             
