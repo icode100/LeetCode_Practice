@@ -19,9 +19,9 @@ class Solution:
                 root.left = recursion(preorder[1:],postorder[:-1])
                 root.right = None
                 return root
-            if idx==1:
-                root.left = TreeNode(preorder[1])
-                return root
+            # if idx==1:
+            #     root.left = TreeNode(preorder[1])
+            #     return root
             root.left = recursion(preorder[1:idx],postorder[:idx2+1])
             root.right = recursion(preorder[idx:],postorder[idx2+1:-1])
             return root
