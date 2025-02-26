@@ -1,17 +1,22 @@
 class Solution:
     def compress(self, chars: List[str]) -> int:
-        counter = 0
-        updator = 0
-        length = 0
-        while counter<len(chars):
-            top = chars[counter]
-            count = 0
-            while counter<len(chars) and chars[counter]==top:
-                count+=1
-                counter+=1
-            temp = top+str(count) if count!=1 else top
-            for c in temp:
-                chars[updator] = c
-                updator+=1
-                length+=1
-        return length
+        stack=[]
+        s=""
+        for i in range(len(chars)):
+            if len(stack)==0 or stack[-1]==chars[i]:
+                stack.append(chars[i])
+            else:
+                s+=stack[-1]
+                if len(stack)!=1:
+                    s+=str(len(stack))
+                stack.clear()
+                stack.append(chars[i])
+        s+=stack[-1]
+        if len(stack)!=1:
+            s+=str(len(stack))
+        chars.clear()
+        for i in s:
+            chars.append((i))
+        return len(s)
+
+        
