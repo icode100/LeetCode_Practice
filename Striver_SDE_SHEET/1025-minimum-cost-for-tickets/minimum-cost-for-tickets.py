@@ -2,15 +2,13 @@ class Solution:
     def mincostTickets(self, days: List[int], costs: List[int]) -> int:
         days.sort()
         numday = [1,7,30]
-        @cache
-        def recursion(i,limit):
-            if i>=len(days): return inf
-            ans = inf
+        dp = [inf for _ in range(len(days)+1)]
+        for i in range(len(days)-1,-1,-1):
             for j,c in enumerate(costs):
                 find = days[i]+numday[j]
                 idx = bisect_left(days,find)
-                if idx==len(days): ans = min(ans,c)
-                else: ans = min(ans,c+recursion(idx,days[i]+numday[j]))
-            return ans
-        return recursion(0,0)
+                # print(idx)
+                if idx >= len(days): dp[i] = min(dp[i],c)
+                else: dp[i] = min(dp[i], c+dp[idx])
+        return dp[0]
                 
