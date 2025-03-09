@@ -1,12 +1,9 @@
 class Solution:
     def rob(self, nums: List[int]) -> int:
         n = len(nums)
-        dp = {}
-        def recursion(index,nums):
-            if index>=len(nums): return 0
-            if index in dp: return dp[index]
-            dp[index] =  max(nums[index]+recursion(index+2,nums), recursion(index+1,nums))
-            return dp[index]
-        return recursion(0,nums)
+        dp = {n:0, n+1:0}
+        for i in range(n-1,-1,-1):
+            dp[i] = max(nums[i]+dp[i+2], dp[i+1])
+        return dp[0]
 
 
