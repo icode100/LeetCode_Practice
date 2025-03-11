@@ -1,20 +1,12 @@
 class Solution:
     def numberOfSubstrings(self, s: str) -> int:
-        # find with every character there is a substring that ends
-        l,r,n = 0,0,len(s)
-        hashing = defaultdict(int)
-        result = 0
-        while r<n:
-            hashing[s[r]]+=1
-            while len(hashing)==3:
-                print("hi")
-                result+=(n-r-1)
-                result+=1
-                hashing[s[l]]-=1
-                if hashing[s[l]]==0:
-                    hashing.pop(s[l])
+        n = len(s)
+        hashmap,ans,l = {},0,0
+        for r in range(n):
+            hashmap[s[r]] = hashmap.get(s[r],0)+1
+            while l<r and len(hashmap)==3:
+                ans+=n-r
+                hashmap[s[l]]-=1
+                if hashmap[s[l]]==0: hashmap.pop(s[l])
                 l+=1
-            r+=1
-        return result
-
-            
+        return ans
