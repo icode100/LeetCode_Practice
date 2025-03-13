@@ -5,12 +5,12 @@ class Solution:
             tree[u].append(v)
             tree[v].append(u)
         ans = [0 for _ in range(n)]
+        di = {}
         def recursion(node,parent):
             di = {labels[node]:1}
             for ngh in tree[node]:
                 if ngh != parent:
-                    temp = recursion(ngh,node)
-                    for k,v in temp.items():
+                    for k,v in recursion(ngh,node).items():
                         di[k] = di.get(k,0)+v
             ans[node] = di[labels[node]]
             return di
