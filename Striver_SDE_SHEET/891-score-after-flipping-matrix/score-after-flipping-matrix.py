@@ -13,7 +13,7 @@ class Solution:
             if m-countz < countz:
                 for j in range(m):
                     grid[j][i] = 1-grid[j][i]
-        print(grid)
+        # print(grid)
         ans = 0
         for i in range(m):
             num = 0
