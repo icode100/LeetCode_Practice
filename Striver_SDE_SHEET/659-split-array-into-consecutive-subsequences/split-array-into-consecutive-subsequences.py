@@ -1,18 +1,19 @@
 class Solution:
-
-    def isPossible(self, A):
-        left = collections.Counter(A)
-        end = collections.Counter()
-        for i in A:
-            if not left[i]: continue
-            left[i] -= 1
-            if end[i - 1] > 0:
-                end[i - 1] -= 1
-                end[i] += 1
-            elif left[i + 1] and left[i + 2]:
-                left[i + 1] -= 1
-                left[i + 2] -= 1
-                end[i + 2] += 1
-            else:
-                return False
+    def isPossible(self, nums: List[int]) -> bool:
+        dp_1, dp_2, dp = {},{},{}
+        for x in nums:
+            if x-1 in dp_1:
+                dp_2[x] = dp_2.get(x,0)+1
+                dp_1[x-1]-=1
+                if dp_1[x-1] == 0: dp_1.pop(x-1)
+            elif x-1 in dp_2:
+                dp[x] = dp.get(x,0)+1
+                dp_2[x-1]-=1
+                if dp_2[x-1]==0: dp_2.pop(x-1)
+            elif x-1 in dp:
+                dp[x-1]-=1
+                dp[x] = dp.get(x,0)+1
+                if dp[x-1]==0: dp.pop(x-1)
+            else: dp_1[x] = dp_1.get(x,0)+1
+        if len(dp_1)>0 or len(dp_2)>0: return False
         return True
