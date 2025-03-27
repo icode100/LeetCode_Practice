@@ -8,7 +8,5 @@ class Solution:
                 if abs(stack[-1])==abs(i):
                     stack.pop()
                 continue
-                
-            # if stack and i*stack[-1]<0 and abs(stack[-1])>abs(i): continue
             stack.append(i)
         return stack
