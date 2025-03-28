@@ -4,5 +4,6 @@ class Solution:
         intervals.sort()
         for s,e in intervals:
             if not ans or s>ans[-1][1]: ans.append([s,e])
-            else: ans[-1][1] = max(e,ans[-1][1])
+            else:
+                ans[-1][1] = max(ans[-1][1],e)
         return ans
