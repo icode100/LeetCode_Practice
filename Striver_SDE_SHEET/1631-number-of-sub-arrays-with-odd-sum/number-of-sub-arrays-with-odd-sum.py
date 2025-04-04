@@ -1,14 +1,17 @@
 class Solution:
     def numOfSubarrays(self, arr: List[int]) -> int:
-        even,odd,ans = 1,0,0
+        N = len(arr)
+        even,odd = 1,0
+        ans = 0
         current = 0
-        for i in arr:
-            current+=i
-            if current&1:
+        mod = int(1e9+7)
+        for i in range(N):
+            current+=arr[i]
+            if current&1: 
                 odd+=1
                 ans+=even
-            else: 
+            else:
                 even+=1
                 ans+=odd
-
-        return ans%int(1e9+7)
+        return ans%mod
+        
