@@ -13,14 +13,13 @@ class Solution:
             return max(left,right)+1
         maxdepth = dfs1(root)
         # print(maxdepth)
-        def dfs(node,depth):
-            if not node: return None
-            if depth==maxdepth: return node
-            left = dfs(node.left,depth+1)
-            right = dfs(node.right,depth+1)
-            if left and right: return node
-            else: return left or right
-        return dfs(root,1)
+        def dfs(node):
+            if not node: return [0,None]
+            lefth,leftnode = dfs(node.left)
+            righth,rightnode = dfs(node.right)
+            if lefth==righth: return [lefth+1,node]
+            else: return [max(lefth,righth)+1, rightnode if righth>lefth else leftnode]
+        return dfs(root)[1]
 
 
 
