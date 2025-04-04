@@ -15,5 +15,4 @@ class Solution:
             if left and right: return root
             if not left: return right
             if not right: return left
-            if not left and not right: return None
         return recursion(root)
