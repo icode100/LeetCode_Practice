@@ -6,13 +6,6 @@
 #         self.right = right
 class Solution:
     def lcaDeepestLeaves(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
-        def dfs1(node):
-            if not node: return 0
-            left = dfs1(node.left)
-            right = dfs1(node.right)
-            return max(left,right)+1
-        maxdepth = dfs1(root)
-        # print(maxdepth)
         def dfs(node):
             if not node: return [0,None]
             lefth,leftnode = dfs(node.left)
