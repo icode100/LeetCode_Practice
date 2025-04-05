@@ -1,51 +1,23 @@
+
 class Solution:
-    def maxSumTwoNoOverlap(self, nums: List[int], firstLen: int, secondLen: int) -> int:
-        n = len(nums)
-        ans = 0
-        prefix = [0]*n
-        suffix = [0]*n
+    def maxSumTwoNoOverlap(self, A: List[int], L: int, M: int) -> int:
 
-        sumi = 0
-        for i in range(n):
-            if i<firstLen:
-                sumi+=nums[i]
-                prefix[i] =sumi
-            else:
-                sumi+=nums[i]
-                sumi-=nums[i-firstLen]
-                prefix[i] =max(prefix[i-1],sumi)
-        sumi = 0
-        for i in range(n-1,-1,-1):
-            if i+secondLen>=n:
-                sumi+=nums[i]
-                suffix[i] = sumi
-            else:
-                sumi+=nums[i]
-                sumi-=nums[i+secondLen]
-                suffix[i] = max(suffix[i+1],sumi)
-        for i in range(firstLen-1,n-secondLen):
-            ans = max(ans,prefix[i]+suffix[i+1])
-        prefix = [0]*n
-        suffix = [0]*n
 
-        sumi = 0
-        for i in range(n):
-            if i<secondLen:
-                sumi+=nums[i]
-                prefix[i] =sumi
-            else:
-                sumi+=nums[i]
-                sumi-=nums[i-secondLen]
-                prefix[i] =max(prefix[i-1],sumi)
-        sumi = 0
-        for i in range(n-1,-1,-1):
-            if i+firstLen>=n:
-                sumi+=nums[i]
-                suffix[i] = sumi
-            else:
-                sumi+=nums[i]
-                sumi-=nums[i+firstLen]
-                suffix[i] = max(suffix[i+1],sumi)
-        for i in range(secondLen-1,n-firstLen):
-            ans = max(ans,prefix[i]+suffix[i+1])
-        return ans
+        # do a CDF so that range sum can easily be calculated
+        for i in range(1, len(A)):
+            A[i] += A[i - 1]
+
+
+        res, Lmax, Mmax = A[L + M - 1], A[L - 1], A[M - 1]
+
+
+        # window  | --- L --- | --- M --- |
+        for i in range(L + M, len(A)):
+            Lmax = max(Lmax, A[i - M] - A[i - L - M])
+            res = max(res, Lmax + A[i] - A[i - M])
+
+        # window  | --- M --- | --- L --- |
+            Mmax = max(Mmax, A[i - L] - A[i - L - M])
+            res = max(res, Mmax + A[i] - A[i - L])
+
+        return res
