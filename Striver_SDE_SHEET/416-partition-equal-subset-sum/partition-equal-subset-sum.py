@@ -7,7 +7,7 @@ class Solution:
         dp = [[False for _ in range(total)] for _ in range(N+1)]
         for i in range(N+1): dp[i][target]=True
         for i in range(N-1,-1,-1):
-            for current in range(total):
+            for current in range(target):
                 dp[i][current] = dp[i+1][current] or (dp[i+1][current+nums[i]] if current+nums[i]<=target else False)
         return dp[0][0]
 
