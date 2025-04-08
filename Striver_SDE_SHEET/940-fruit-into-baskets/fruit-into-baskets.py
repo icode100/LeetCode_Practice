@@ -1,16 +1,14 @@
 class Solution:
-  def totalFruit(self, tree: List[int]) -> int:
-    ans = 0
-    count = collections.defaultdict(int)
-
-    l = 0
-    for r, t in enumerate(tree):
-      count[t] += 1
-      while len(count) > 2:
-        count[tree[l]] -= 1
-        if count[tree[l]] == 0:
-          del count[tree[l]]
-        l += 1
-      ans = max(ans, r - l + 1)
-
-    return ans
+    def totalFruit(self, fruits: List[int]) -> int:
+        N = len(fruits)
+        checkset = defaultdict(int)
+        l = 0
+        ans = 0
+        for r in range(N):
+            checkset[fruits[r]]+=1
+            while l<r and len(checkset)>2:
+                checkset[fruits[l]]-=1
+                if checkset[fruits[l]]==0: checkset.pop(fruits[l])
+                l+=1
+            ans = max(ans,r-l+1)
+        return ans
