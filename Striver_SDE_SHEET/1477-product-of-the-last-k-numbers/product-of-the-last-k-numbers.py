@@ -1,15 +1,14 @@
 class ProductOfNumbers:
+
     def __init__(self):
-        self.prefix = [1]
+        self.stack = [1]
     def add(self, num: int) -> None:
-        if num==0:
-            self.prefix = [1]
-        else:
-            self.prefix.append(self.prefix[-1]*num)
+        if num==0: self.stack = [1]
+        else: self.stack.append(self.stack[-1]*num)
     def getProduct(self, k: int) -> int:
-        if k>len(self.prefix)-1: return 0
-        # print(k,self.prefix)
-        return self.prefix[-1]//self.prefix[-k-1]
+        if k>len(self.stack)-1: return 0
+        else: return self.stack[-1]//self.stack[-k-1]
+
         
 
 
