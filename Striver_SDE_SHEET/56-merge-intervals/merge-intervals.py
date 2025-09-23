@@ -1,15 +1,15 @@
 class Solution:
     def merge(self, intervals: List[List[int]]) -> List[List[int]]:
-        ans = list()
-        d = SortedDict()
-        for s,e in intervals:
-            d[s] = d.get(s,0)+1
-            d[e] = d.get(e,0)-1
-        start = 0
-        count = 0
-        for k,v in d.items():
-            if count==0: start = k
-            count+=v
-            if count == 0: ans.append([start,k])
+        intervals.sort()
+        # print(intervals)
+        prev = intervals[0][1]
+        start = intervals[0][-0]
+        ans = []
+        for i in range(1,len(intervals)):
+            if intervals[i][0]<=prev: prev = max(intervals[i][1],prev)
+            else:
+                ans.append([start,prev])
+                start = intervals[i][0]
+                prev = intervals[i][1]
+        ans.append([start,prev])
         return ans
-
