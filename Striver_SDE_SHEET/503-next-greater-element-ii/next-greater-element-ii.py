@@ -1,11 +1,10 @@
 class Solution:
     def nextGreaterElements(self, nums: List[int]) -> List[int]:
-        n = len(nums)
         stack = list()
-        res = [-1]*n
-        for i in range(n*2):
-            num,i = nums[i%n],i%n
-            while stack and num>nums[stack[-1]]:
-                res[stack.pop()] = num
+        N = len(nums)
+        mapper = {}
+        for i in range(N*2):
+            while stack and nums[i%N]>nums[stack[-1]%N]:
+                mapper[stack.pop()%N] = nums[i%N]
             stack.append(i)
-        return res
+        return [mapper[i] if i in mapper else -1 for i in range(N)]
