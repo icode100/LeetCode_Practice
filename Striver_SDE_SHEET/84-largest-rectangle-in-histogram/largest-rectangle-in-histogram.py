@@ -14,7 +14,7 @@ class Solution:
             while stack and heights[stack[-1]]>height:
                 leftsmall[stack.pop()] = i+1
             stack.append(i)
-        print(leftsmall,rightsmall)
+        # print(leftsmall,rightsmall)
         ans = 0
         for i in range(N):
             ans = max(ans,(rightsmall[i]-leftsmall[i]+1)*heights[i])
