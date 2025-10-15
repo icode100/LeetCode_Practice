@@ -1,31 +1,30 @@
 class MedianFinder:
 
     def __init__(self):
-        self.lheap = list()
-        self.rheap = list()
-        self.counter = 0
+        self.left = list()
+        self.right = list()
+
     def addNum(self, num: int) -> None:
-        if self.counter%2==0:
-            if self.rheap and num > -self.lheap[0] and num > self.rheap[0]:
-                heappush(self.rheap,num)
-                heappush(self.lheap,-heappop(self.rheap))
+        if (len(self.left)+len(self.right))&1==0:
+            if self.left: leftmax = -self.left[0]
+            if self.right: rightmin = self.right[0]
+            if self.right and num > leftmax and num >rightmin:
+                heappush(self.right,num)
+                heappush(self.left,-heappop(self.right))
             else:
-                heappush(self.lheap,-num)
-            self.counter+=1
+                heappush(self.left,-num) #because the median in case of odd length will be from left half
         else:
-            if num < -self.lheap[0]:
-                heappush(self.lheap,-num)
-                heappush(self.rheap,-heappop(self.lheap))
+            if self.left: leftmax = -self.left[0]
+            if self.right: rightmin = self.right[0]
+            if num<leftmax:
+                heappush(self.left,-num)
+                heappush(self.right,-heappop(self.left))
             else:
-                heappush(self.rheap,num)
-            self.counter+=1
+                heappush(self.right,num)   
 
     def findMedian(self) -> float:
-        if len(self.lheap)==len(self.rheap):
-            return (-self.lheap[0]+self.rheap[0])/2
-        else:
-            return -self.lheap[0]
-        
+        if len(self.left)==len(self.right): return (-self.left[0]+self.right[0])/2
+        else: return -self.left[0]
 
 
 # Your MedianFinder object will be instantiated and called as such:
