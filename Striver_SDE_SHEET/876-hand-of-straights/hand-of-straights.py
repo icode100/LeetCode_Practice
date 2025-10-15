@@ -1,17 +1,14 @@
 class Solution:
     def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
-        hand.sort()
-        counter = Counter(hand)
-        for x in hand:
-            if x not in counter: continue
-            for diff in range(groupSize):
-                if x+diff not in counter: return False
-                counter[x+diff]-=1
-                if counter[x+diff]==0: counter.pop(x+diff)
-        return True 
-            
-                
+        counter = SortedDict()
+        for i in hand:
+            counter[i] = counter.get(i,0)+1
         
-
-
-
+        while counter:
+            start = counter.peekitem(0)[0]
+            for i in range(groupSize):
+                if start+i in counter:
+                    counter[start+i]-=1
+                    if counter[start+i]==0: counter.pop(start+i)
+                else: return False
+        return True
