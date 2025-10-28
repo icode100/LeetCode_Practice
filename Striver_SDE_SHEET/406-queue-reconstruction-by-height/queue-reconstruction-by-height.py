@@ -1,15 +1,20 @@
 class Solution:
     def reconstructQueue(self, people: List[List[int]]) -> List[List[int]]:
-        n = len(people)
-        ans = [[] for i in range(n)]
-        # heapify(people)
-        for h,k in sorted(people):
-            height,pos = h,k
-            k = pos
-            i = 0
-            while k or ans[i]!=[]:
-                if ans[i]==[] or ans[i][0]>=height:
-                    k-=1
-                i+=1
-            ans[i] = [height,pos]
+        people = sorted(people)
+        N = len(people)
+        ans = [[] for _ in range(N)]
+        
+        for h,k in people:
+            tempk = k
+            index = 0
+            while tempk or ans[index]!=[]:
+                if ans[index]==[] or ans[index][0]==h: tempk-=1
+                index+=1
+            ans[index] = [h,k]
+
         return ans
+
+
+
+        
+        
