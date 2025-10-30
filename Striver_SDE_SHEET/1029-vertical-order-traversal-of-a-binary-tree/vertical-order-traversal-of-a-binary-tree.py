@@ -7,22 +7,22 @@
 class Solution:
     def verticalTraversal(self, root: Optional[TreeNode]) -> List[List[int]]:
         hashmap = defaultdict(lambda: defaultdict(lambda:SortedList()))
-        self.minx,self.maxx = inf,-inf
-        def dfs(root,x,y):
-            if not root: return 
-            self.minx = min(self.minx,x)
-            self.maxx = max(self.maxx,x)
-            hashmap[x][y].add(root.val)
-            dfs(root.left,x-1,y+1)
-            dfs(root.right,x+1,y+1)
-        dfs(root,0,0)
+        q = deque([(root,0,0)])
+        while q:
+            N = len(q)
+            for _ in range(N):
+                node,x,y = q.popleft()
+                hashmap[x][y].add(node.val)
+                if node.left: q.append((node.left,x-1,y+1))
+                if node.right: q.append((node.right,x+1,y+1))
         ans = list()
-        for i in range(self.minx,self.maxx+1):
+        for x in sorted(hashmap.keys()):
             temp = list()
-            for k in sorted(hashmap[i].keys()):
-                temp+=list(hashmap[i][k])
+            for y in sorted(hashmap[x].keys()):
+                temp+=list(hashmap[x][y])
             ans.append(temp.copy())
         return ans
+
                 
 
 
