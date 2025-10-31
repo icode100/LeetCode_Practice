@@ -1,26 +1,20 @@
 class Solution:
-    def findTheCity(self, n: int, edges: List[List[int]], threshold: int) -> int:
-        cost = defaultdict(lambda: defaultdict(lambda:inf))
-        for i in range(n):cost[i][i] = 0
-        for u,v,wt in edges:
-            cost[u][v] = wt
-            cost[v][u] = wt
+    def findTheCity(self, n: int, edges: List[List[int]], distanceThreshold: int) -> int:
+        distance = [[sys.maxsize for _ in range(n)] for _ in range(n)]
+        for i in range(n): distance[i][i] = 0
+        for u,v,w in edges:
+            distance[u][v] = w
+            distance[v][u] = w
         result = defaultdict(set)
         ans = inf
         res = -1
-        for via in range(n):
+        for k in range(n):
             for u in range(n):
                 for v in range(n):
-                    cost[u][v] = min(cost[u][v],cost[u][via]+cost[via][v])
-                    if cost[u][v]<=threshold and v!=u:
-                        result[u].add(v)
-                        
-        # print(cost)
-
+                    distance[u][v] = min(distance[u][v],distance[u][k]+distance[k][v])
+                    if distance[u][v]<=distanceThreshold and u!=v: result[u].add(v)
         for i in range(n):
             if len(result[i])<=ans:
                 ans = len(result[i])
                 res = i
-        return res    
-        
-            
+        return res
