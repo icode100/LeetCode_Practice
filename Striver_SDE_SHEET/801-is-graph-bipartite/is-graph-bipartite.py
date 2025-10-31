@@ -1,25 +1,17 @@
-from typing import List
 class Solution:
     def isBipartite(self, graph: List[List[int]]) -> bool:
-        coloured = [-1 for i in range(len(graph))]
-        def check(node):
-            q = deque()
-            q.append(node)
-            coloured[node]=0
-            while q:
-                curr = q.popleft()
-                for neighbor in graph[curr]:
-                    if coloured[neighbor]==-1:
-                        coloured[neighbor] = int(not coloured[curr])
-                        q.append(neighbor)
-                    elif coloured[neighbor]==coloured[curr]:
-                        return False
+        vis = defaultdict(int)
+        N = len(graph)
+        
+        def dfs(node,col):
+            vis[node] = col
+            for ngh in graph[node]:
+                if ngh not in vis: 
+                    if dfs(ngh,1-col)==False: return False
+                elif vis[ngh] == col: return False
             return True
-
-
-
-        for i in range(len(graph)):
-            if coloured[i]==-1:
-                if check(i) is False:
-                    return False
+            
+        for u in range(N):
+            if u not in vis:
+                if dfs(u,0)==False: return False
         return True
