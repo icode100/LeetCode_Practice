@@ -1,32 +1,26 @@
 class Solution:
     def largestDivisibleSubset(self, nums: List[int]) -> List[int]:
-        nums.sort()
         N = len(nums)
-
-        dp = [deque([i]) for i in nums]
-        ans = list()
+        nums.sort()
+        dp = [1]*N
+        parent = [i for i in range(N)]
+        last = 0
+        ans = 0
         for i in range(N):
             for j in range(i):
-                if nums[i]%nums[j]==0:
-                    dp[j].append(nums[i])
-                    temp = dp[j].copy()
-                    dp[j].pop()
-                    if len(temp)>len(dp[i]): dp[i] = temp
-                    
-            ans = dp[i] if len(dp[i])>len(ans) else ans
-        return list(ans)
-        # @cache
-        # def recursion(i):
-        #     if i>=N: return []
-        #     ans = [nums[i]]
-        #     for j in range(i+1,N):
-        #         if nums[j]%nums[i]==0:
-        #             temp = [nums[i]]+recursion(j)
-        #             ans = temp if len(temp)>len(ans) else ans
-        #     return ans
-        # ans = list()
-        # for i in range(N):
-        #     temp = recursion(i)
-        #     ans = temp if len(temp)>len(ans) else ans
-        # return ans
-            
+                if nums[i]%nums[j]==0 and dp[i]<dp[j]+1:
+                    # print('hi')
+                    dp[i] = dp[j]+1
+                    parent[i] = j
+            if ans<dp[i]:
+                ans = dp[i]
+                last = i
+        # print(dp)
+        ans = list()
+        ptr = last
+        while ptr!=parent[ptr]:
+            ans.append(nums[ptr])
+            ptr = parent[ptr]
+        ans.append(nums[ptr])
+        return ans[::-1]
+        
