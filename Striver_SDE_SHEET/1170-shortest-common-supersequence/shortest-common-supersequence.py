@@ -1,33 +1,30 @@
 class Solution:
-    def shortestCommonSupersequence(self, string1: str, string2: str) -> str:
-        dp = [[0 for _ in range(len(string2)+1)] for __ in range(len(string1)+1)]
-        for i in range(len(string1)+1): dp[i][len(string2)] = len(string1)-i
-        for j in range(len(string2)+1): dp[len(string1)][j] = len(string2)-j
-        for i in range(len(string1)-1,-1,-1):
-            for j in range(len(string2)-1,-1,-1):
-                if string1[i]==string2[j]:
-                    dp[i][j] = 1+dp[i+1][j+1]
-                else:
-                    dp[i][j] = 1+min(dp[i+1][j],dp[i][j+1])
-        i,j,ans = 0,0,""
-        while i<len(string1) and j<len(string2):
-            if string1[i]==string2[j]:
-                ans+=string1[i]
-                i+=1
-                j+=1
+    def shortestCommonSupersequence(self, str1: str, str2: str) -> str:
+        N,M = len(str1),len(str2)
+        dp = [[0]*(M+1) for _ in range(N+1)]
+        for i in range(1,N+1):
+            for j in range(1,M+1):
+                if str1[i-1]==str2[j-1]: dp[i][j] = dp[i-1][j-1]+1
+                else: dp[i][j] = max(dp[i-1][j],dp[i][j-1])
+        ans = ""
+        i=N
+        j=M
+        while i>0 and j>0:
+            if str1[i-1]==str2[j-1]:
+                ans+=str1[i-1]
+                i-=1
+                j-=1
             else:
-                if dp[i+1][j]<dp[i][j+1]: 
-                    ans+=string1[i]
-                    i+=1
+                if dp[i-1][j]>dp[i][j-1]:
+                    ans+=str1[i-1]
+                    i-=1
                 else:
-                    ans+=string2[j]
-                    j+=1
-        if i<len(string1): ans+=string1[i:]
-        if j<len(string2): ans+=string2[j:]
-        return ans
-        
-
-        
-
-
-
+                    ans+=str2[j-1]
+                    j-=1
+        while i>0:
+            ans+=str1[i-1]
+            i-=1
+        while j>0:
+            ans+=str2[j-1]
+            j-=1
+        return ans[::-1]
