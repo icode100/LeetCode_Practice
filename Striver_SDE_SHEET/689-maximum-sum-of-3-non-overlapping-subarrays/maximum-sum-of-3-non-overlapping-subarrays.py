@@ -1,24 +1,22 @@
 class Solution:
     def maxSumOfThreeSubarrays(self, nums: List[int], k: int) -> List[int]:
         N = len(nums)
-        prefix = [0]+list(accumulate(nums))
-
+        prefix = [sum(nums[:k])]
+        for i in range(k,N): prefix.append(prefix[-1]-nums[i-k]+nums[i])
         @cache
-        def recursion(i,M):
-            if M==0 or i>N-k: return 0
-            pick = (prefix[i+k]-prefix[i])+recursion(i+k,M-1)
-            notpick = recursion(i+1,M)
-            return max(pick,notpick)
-        
+        def recursion(index,count):
+            if index>N-k or count<=0: return 0
+            return max(recursion(index+1,count), prefix[index]+recursion(index+k,count-1))
         i = 0
         ans = list()
         while i<=N-k and len(ans)<3:
-            pick = prefix[i+k]-prefix[i] +recursion(i+k,3-len(ans)-1)
-            notpick = recursion(i+1,3-len(ans))
-            if pick>=notpick:
+            pick,notpick = prefix[i]+recursion(i+k,3-len(ans)-1), recursion(i+1,3-len(ans))
+            if pick>=notpick: 
                 ans.append(i)
                 i+=k
             else: i+=1
-        return ans
+        return  ans
+
+
         
             
