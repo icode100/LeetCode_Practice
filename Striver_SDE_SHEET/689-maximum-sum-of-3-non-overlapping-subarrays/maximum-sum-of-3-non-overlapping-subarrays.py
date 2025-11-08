@@ -3,14 +3,12 @@ class Solution:
         N = len(nums)
         prefix = [0]+list(accumulate(nums))
 
-        dp = {}
+        @cache
         def recursion(i,M):
             if M==0 or i>N-k: return 0
-            if (i,M) in dp: return dp[(i,M)]
             pick = (prefix[i+k]-prefix[i])+recursion(i+k,M-1)
             notpick = recursion(i+1,M)
-            dp[(i,M)] = max(pick,notpick)
-            return dp[(i,M)]
+            return max(pick,notpick)
         
         i = 0
         ans = list()
