@@ -1,21 +1,27 @@
+from collections import deque
+from typing import List
+
 class Solution:
     def minimumJumps(self, forbidden: List[int], a: int, b: int, x: int) -> int:
-        forbidden, lower, upper = set(forbidden), 0, 1e6
-        if 0 in forbidden:
-            return -1
-        queue, steps = deque(), -1
-        queue.append((0, True))
-        forbidden.add(0)
-        while queue:
-            steps += 1            
-            for i in range(len(queue)):
-                pos, canBackwards = queue.popleft()                
-                if pos == x:
-                    return steps                
-                if (canBackwards and pos - b > 0 and pos-b not in forbidden):
-                    queue.append((pos-b, False))
-                    forbidden.add(pos-b)                
-                if (pos+a <= upper and pos+a not in forbidden):
-                    queue.append((pos+a, True))
-                    forbidden.add(pos+a)        
+        forbidden = set(forbidden)
+        visited = set()
+        
+        q = deque()
+        q.append((0, 0, True)) 
+        visited.add((0, True))
+        limit = max(x, max(forbidden, default=0)) + a + b + 1000
+        while q:
+            node, step, can_back = q.popleft()
+            if node == x:
+                return step
+            f = node + a
+            if f <= limit and f not in forbidden and (f, True) not in visited:
+                visited.add((f, True))
+                q.append((f, step + 1, True))
+            if can_back:
+                bck = node - b
+                if bck >= 0 and bck not in forbidden and (bck, False) not in visited:
+                    visited.add((bck, False))
+                    q.append((bck, step + 1, False))
+        
         return -1
