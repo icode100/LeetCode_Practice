@@ -1,16 +1,12 @@
 class Solution:
     def mincostTickets(self, days: List[int], costs: List[int]) -> int:
-        days.sort()
-        numday = [1,7,30]
+        N = len(days)
         @cache
-        def recursion(i):
-            if i>=len(days): return inf
-            ans = inf
-            for j,c in enumerate(costs):
-                find = days[i]+numday[j]
-                idx = bisect_left(days,find)
-                if idx==len(days): ans = min(ans,c)
-                else: ans = min(ans,c+recursion(idx))
+        def rec(index):
+            if index>=N: return int(1e9)
+            ans = int(1e9)
+            for i,cost in zip([1,7,30],costs):
+                idx = bisect_left(days,days[index]+i)
+                ans = min(ans,cost) if idx==N else min(ans,cost+rec(idx))
             return ans
-        return recursion(0)
-                
+        return rec(0)
