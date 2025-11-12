@@ -1,13 +1,9 @@
 class Solution:
     def minFlipsMonoIncr(self, s: str) -> int:
-        dp = defaultdict(lambda:defaultdict(int))
-        for i in range(len(s)-1,-1,-1):
-            if s[i]=='0':
-                dp[i][0] = 1+dp[i+1][0]
-                dp[i][1] = min(1+dp[i+1][0],dp[i+1][1])
-            else:
-                dp[i][0] = dp[i+1][0]
-                dp[i][1] = min(1+dp[i+1][1],dp[i+1][0])
-        return min(dp[0][0],dp[0][1])
-
-        
+        N = len(s)
+        @cache
+        def recursion(index,flag):
+            if index>=N: return 0
+            if flag: return 1+recursion(index+1,flag) if s[index]=='0' else recursion(index+1,flag)
+            else: return min(1+recursion(index+1,not flag),recursion(index+1,flag)) if s[index]=='0' else min(1+recursion(index+1,flag), recursion(index+1,not flag))
+        return min(recursion(0,True),recursion(0,False))
