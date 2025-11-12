@@ -4,24 +4,17 @@ class Solution:
         N = len(routes)
         graph = defaultdict(list)
         for bus in range(N):
-            for stop in routes[bus]:
-                graph[stop].append(bus)
-        q = deque()
-        vis = set()
-        for bus in graph[source]:
-            q.append(bus)
-            vis.add(bus)
-        count = 1
+            for route in routes[bus]:
+                graph[route].append(bus)
+        q = deque([(bus,1) for bus in graph[source]])
+        mask = 0
+        for bus in graph[source]: mask|=(1<<bus)
         while q:
-            K = len(q)
-            for _ in range(K):
-                bus = q.popleft()
-                for next in routes[bus]:
-                    if next==target: return count
-                    for nextbus in graph[next]:
-                        if nextbus not in vis:
-                            vis.add(nextbus)
-                            q.append(nextbus)
-            count+=1
+            bus,count = q.popleft()
+            for route in routes[bus]:
+                if route==target: return count
+                for ngh in graph[route]:
+                    if (1<<ngh) & mask == 0: 
+                        mask|=(1<<ngh)
+                        q.append((ngh,count+1))
         return -1
-        
