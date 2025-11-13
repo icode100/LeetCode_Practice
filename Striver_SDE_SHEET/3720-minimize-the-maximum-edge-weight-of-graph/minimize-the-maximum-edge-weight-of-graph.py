@@ -1,20 +1,17 @@
 class Solution:
     def minMaxWeight(self, n: int, edges: List[List[int]], threshold: int) -> int:
-        heap = list()
-        revgraph = defaultdict(list)
+        rev = defaultdict(list)
         for u,v,w in edges:
-            revgraph[v].append((u,w))
-        heap.append((0,0,-1))
-        ans = 0
+            rev[v].append((u,w))
+        heap = [(0,0)]
         vis = set()
+        ans = 0
         while heap:
-            weight,node,parent = heappop(heap)
+            wt,node = heappop(heap)
             if node in vis: continue
             vis.add(node)
-            ans = max(ans,weight)
-            for ngh,wt in revgraph[node]:
+            ans = max(ans,wt)
+            for ngh,wt in rev[node]:
                 if ngh not in vis:
-                    heappush(heap,(wt,ngh,node))
+                    heappush(heap,(wt,ngh))
         return ans if len(vis)==n else -1
-        
-            
