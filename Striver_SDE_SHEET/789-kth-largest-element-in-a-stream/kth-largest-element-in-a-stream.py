@@ -1,13 +1,22 @@
 class KthLargest:
 
     def __init__(self, k: int, nums: List[int]):
-        self.container = SortedList()
-        for n in nums: self.container.add(n)
+        self.heap = list()
         self.k = k
+        while nums and len(self.heap)<k: heappush(self.heap,nums.pop())
+        while nums:
+            num = nums.pop()
+            if num>self.heap[0]: 
+                heappop(self.heap)
+                heappush(self.heap,num)
 
     def add(self, val: int) -> int:
-        self.container.add(val)
-        return self.container[-self.k]
+        if len(self.heap)<self.k: heappush(self.heap,val)
+        else: 
+            if val>self.heap[0]:
+                heappop(self.heap)
+                heappush(self.heap,val)
+        return self.heap[0]
         
 
 
