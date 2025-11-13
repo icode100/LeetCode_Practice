@@ -1,16 +1,20 @@
 class Solution:
-    def trap(self, height: List[int]) -> int:
-        left = [-inf]
-        right = deque([-inf])
-        N = len(height)
-        current = -1
-        for i in range(1,N):
-            left.append(max(left[-1],height[i-1]))
-        for i in range(N-2,-1,-1):
-            right.appendleft(max(right[0],height[i+1]))
+    def trap(self, nums: List[int]) -> int:
+        N = len(nums)
+        left = 0
+        right = N-1
+        leftmax,rightmax = nums[left],nums[right]
         ans = 0
-        for i in range(N):
-            ans+=max(0, min(left[i],right[i])-height[i])
+        while left<right:
+            if leftmax<rightmax:
+                left+=1
+                leftmax = max(leftmax,nums[left])
+                ans+=leftmax-nums[left]
+            else:
+                right-=1
+                rightmax = max(rightmax,nums[right])
+                ans+=rightmax-nums[right]
         return ans
+
 
 
