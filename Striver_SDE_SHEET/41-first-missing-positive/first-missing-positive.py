@@ -1,16 +1,11 @@
 class Solution:
     def firstMissingPositive(self, nums: List[int]) -> int:
-        checker = set(nums)
-        result = inf
-        start = min(nums)
-        end = max(nums)
-        if end<1:
-            return 1
-        if start>1:
-            return 1
-        for i in range(1,10**5+2):
-            if i not in checker:
-                return i
-        
-
-
+        N = len(nums)
+        for i in range(N):
+            if nums[i]<=0 or nums[i]>N: nums[i] = N+1
+        for num in nums:
+            idx = abs(num)-1
+            if idx<N: nums[idx] = -abs(nums[idx])
+        for i in range(N):
+            if nums[i]>0: return i+1
+        return N+1
