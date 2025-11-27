@@ -5,7 +5,6 @@ class Solution:
 
     def maxSubarraySum(self, nums: List[int], k: int) -> int:
         min_prefix = [self.INT_MAX]*k
-        # min_prefix[0] = 0
 
         N = len(nums)
         ans = self.INT_MIN
