@@ -1,20 +1,30 @@
 class Solution:
-    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
-        graph = defaultdict(list)
+    def maxKDivisibleComponents(self, N: int, edges: List[List[int]], values: List[int], k: int) -> int:
+
+        graph = [list() for _ in range(N)]
         for u,v in edges:
             graph[u].append(v)
             graph[v].append(u)
-        ans = 0
-        def recursion(node,parent):
-            nonlocal ans
-            ret = values[node]
+
+        
+        def dfs(node,parent):
+            
+            current = 0
             for ngh in graph[node]:
-                if ngh != parent: ret+=recursion(ngh,node)
-            if ret%k==0:
-                ans+=1
-                ret = 0
-            return ret
-        recursion(0,-1)
-        return ans
+                if ngh != parent:
+
+                    k_comp,val = dfs(ngh,node)
+                    values[node]+=val
+                    current+=k_comp
+            
+            if values[node]%k == 0:
+                current+=1
+                values[node] = 0
+            
+            return current,values[node]
+        
+        return dfs(0,-1)[0]
+
+            
 
             
