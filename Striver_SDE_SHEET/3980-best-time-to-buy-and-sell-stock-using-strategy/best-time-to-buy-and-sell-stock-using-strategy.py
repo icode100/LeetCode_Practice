@@ -6,6 +6,8 @@ class Solution:
         stratSuffix: List[int] = list()
 
         current:int = 0
+        i:int
+        
         for i in range(N):
             current+=(strategy[i]*prices[i])
             stratPrefix.append(current)
@@ -20,10 +22,10 @@ class Solution:
         ans:int = stratPrefix[-1]
 
         for i in range(N-k+1):
-            prefixSum = 0 if i==0 else stratPrefix[i-1]
-            suffixSum = 0 if i==N-k else stratSuffix[i+k]
+            prefixSum:int = 0 if i==0 else stratPrefix[i-1]
+            suffixSum:int = 0 if i==N-k else stratSuffix[i+k]
 
-            changeSum = purePrefix[i+k-1]-purePrefix[i+(k//2)-1]
+            changeSum:int = purePrefix[i+k-1]-purePrefix[i+(k//2)-1]
 
             ans = max(ans,prefixSum+suffixSum+changeSum)
         
