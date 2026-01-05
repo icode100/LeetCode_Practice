@@ -7,7 +7,7 @@ class Solution:
             elif si=='1' and ti=='0': c1+=1
         flip = (c1+c0)*flipCost
         swap = min(c0,c1)*swapCost + abs(c0-c1)*flipCost
-        cross = min(c0,c1)*swapCost + (abs(c0-c1)//2)*(crossCost+swapCost) + (abs(c0-c1)%2)*flipCost
+        cross = min(c0,c1)*swapCost + (abs(c0-c1)>>1)*(crossCost+swapCost) +(flipCost if abs(c0-c1)&1 else 0)
 
         return min(flip,swap,cross)
         
