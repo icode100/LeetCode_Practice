@@ -5,13 +5,12 @@
 #         self.left = left
 #         self.right = right
 class Solution:
+    def __init__(self): self.ans = -inf
     def maxPathSum(self, root: Optional[TreeNode]) -> int:
-        self.pathsum = -sys.maxsize
         def dfs(root):
             if not root: return 0
-            leftsum = max(dfs(root.left),0)
-            rightsum = max(dfs(root.right),0)
-            self.pathsum = max(self.pathsum,leftsum+rightsum+root.val)
-            return max(leftsum,rightsum)+root.val
+            lefth,righth = max(0,dfs(root.left)),max(0,dfs(root.right))
+            self.ans = max(self.ans,lefth+righth+root.val)
+            return max(lefth,righth)+root.val
         dfs(root)
-        return self.pathsum
+        return self.ans
