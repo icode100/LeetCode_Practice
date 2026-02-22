@@ -1,37 +1,65 @@
+from collections import defaultdict
+from typing import List
+
 class Solution:
     def maxTargetNodes(self, edges1: List[List[int]], edges2: List[List[int]]) -> List[int]:
-        graph1 = defaultdict(list)
-        graph2 = defaultdict(list)
-        N = len(edges1)+1
-        for u,v in edges1:
-            graph1[u].append(v)
-            graph1[v].append(u)
-        for u,v in edges2:
-            graph2[u].append(v)
-            graph2[v].append(u)
-
-        def build(graph):
-            count = [0,0]
-            q = deque([(0,-1,0)])
-            color = defaultdict(int)
-            while q:
-                node,parent,c = q.popleft()
-                color[node] = c
-                count[c]+=1
-                for ngh in graph[node]:
-                    if ngh != parent:
-                        q.append((ngh,node,1-c))
-            return count,color
         
-        count1,color1 = build(graph1)
-        count2,color2 = build(graph2)
-        ans = list()
-        for i in range(N):
-            col = color1[i]
-            ans.append(count1[col]+max(count2))
-        return ans
-            
+        def solve(edges):
+            graph = defaultdict(list)
+            n = len(edges) + 1
+            for u, v in edges:
+                graph[u].append(v)
+                graph[v].append(u)
 
+            # Subtree DP
+            even = [1] * n   # count itself
+            odd = [0] * n
 
+            def dfs1(u, parent):
+                for v in graph[u]:
+                    if v == parent:
+                        continue
+                    dfs1(v, u)
+                    even[u] += odd[v]
+                    odd[u] += even[v]
 
+            dfs1(0, -1)
 
+            # Reroot DP
+            new_even = [0] * n
+            new_odd = [0] * n
+
+            new_even[0] = even[0]
+            new_odd[0] = odd[0]
+
+            def dfs2(u, parent):
+                for v in graph[u]:
+                    if v == parent:
+                        continue
+
+                    # Remove v subtree contribution from u
+                    even_out = new_even[u] - odd[v]
+                    odd_out  = new_odd[u] - even[v]
+
+                    # Flip parity when moving root to v
+                    new_even[v] = even[v] + odd_out
+                    new_odd[v]  = odd[v] + even_out
+
+                    dfs2(v, u)
+
+            dfs2(0, -1)
+
+            return new_even
+
+        # Solve both trees
+        even1 = solve(edges1)
+        even2 = solve(edges2)
+
+        best_tree2 = max(even2)
+
+        # For each node in tree1
+        result = []
+        for val in even1:
+            result.append(val + best_tree2)
+
+        return result
