@@ -1,12 +1,19 @@
 class Solution:
-    def maximumValueSum(self, nums: List[int], k: int, edges: List[List[int]]) -> int:
+   def maximumValueSum(self,nums, k, edges):
+        base_sum = sum(nums)
+        deltas = [(num ^ k) - num for num in nums]
 
-        @cache
-        def recursion(i,p):
-            if i==len(nums):
-                return 0 if p==0 else -int(1e9)
-            return max(
-                (nums[i]^k)+recursion(i+1,p^1),
-                nums[i]+recursion(i+1,p)
-            )
-        return recursion(0,0)
+        total_gain = 0
+        positive_count = 0
+        min_abs_delta = float('inf')
+
+        for d in deltas:
+            if d > 0:
+                total_gain += d
+                positive_count += 1
+            min_abs_delta = min(min_abs_delta, abs(d))
+
+        if positive_count % 2 == 0:
+            return base_sum + total_gain
+        else:
+            return base_sum + total_gain - min_abs_delta
