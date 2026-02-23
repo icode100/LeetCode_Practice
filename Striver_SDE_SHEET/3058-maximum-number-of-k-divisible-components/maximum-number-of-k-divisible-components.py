@@ -1,30 +1,18 @@
 class Solution:
-    def maxKDivisibleComponents(self, N: int, edges: List[List[int]], values: List[int], k: int) -> int:
-
-        graph = [list() for _ in range(N)]
+    def maxKDivisibleComponents(self, n: int, edges: List[List[int]], values: List[int], k: int) -> int:
+        tree = defaultdict(list)
         for u,v in edges:
-            graph[u].append(v)
-            graph[v].append(u)
-
-        
+            tree[u].append(v)
+            tree[v].append(u)
+        self.count = 0
         def dfs(node,parent):
-            
             current = 0
-            for ngh in graph[node]:
-                if ngh != parent:
-
-                    k_comp,val = dfs(ngh,node)
-                    values[node]+=val
-                    current+=k_comp
-            
-            if values[node]%k == 0:
-                current+=1
-                values[node] = 0
-            
-            return current,values[node]
-        
-        return dfs(0,-1)[0]
-
-            
-
-            
+            for ngh in tree[node]:
+                if ngh == parent: continue
+                current+=dfs(ngh,node)
+            if ((current+values[node])%k)==0:
+                self.count+=1
+                return 0
+            return current+values[node]
+        dfs(0,-1)
+        return self.count
