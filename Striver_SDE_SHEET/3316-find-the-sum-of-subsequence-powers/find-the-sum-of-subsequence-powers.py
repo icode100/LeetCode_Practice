@@ -1,9 +1,8 @@
 class Solution:
     def sumOfPowers(self, nums: List[int], k: int) -> int:
         '''
-        * sort and fix the difference
-        * smallest diff is always between adjacent ones
-        * dp state = dp[t][p] = number of ways to pick t elements ending at p given the fixed difference |nums[i]-nums[j]| and p>j
+        * sort
+        * dp state = dp(i,diff,last,rem) use pick and notpick if rem==0 return diff where diff is the min difference
         '''
         mod = int(1e9+7)
         nums.sort()
